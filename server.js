@@ -59,15 +59,17 @@ function proxyToSupabase(req, res, urlPath) {
       (req.method === 'PATCH' || req.method === 'POST') &&
       (req.headers['content-type'] || '').includes('application/json');
 
+    if (urlPath.startsWith('/rest/v1/')) {
+      console.log('[DEBUG rest call]', req.method, req.url, '| content-type:', req.headers['content-type'], '| bodyLen:', body.length, '| raw:', body.toString('utf8').slice(0, 500));
+    }
+
     if (isJsonRest && body.length) {
       try {
         const parsed = JSON.parse(body.toString('utf8'));
-        if (urlPath.startsWith('/rest/v1/user_plan_preferences')) {
-          console.log('[DEBUG user_plan_preferences body]', req.method, JSON.stringify(parsed));
-        }
         body = Buffer.from(JSON.stringify(sanitizeEmptyDates(parsed)), 'utf8');
-      } catch {
-        // no era JSON válido / no parseable: se reenvía tal cual
+        console.log('[DEBUG sanitized]', req.url, '->', JSON.stringify(parsed) === JSON.stringify(sanitizeEmptyDates(parsed)) ? 'sin cambios' : 'MODIFICADO', JSON.stringify(sanitizeEmptyDates(parsed)));
+      } catch (e) {
+        console.log('[DEBUG parse error]', req.url, e.message);
       }
     }
 
