@@ -62,6 +62,9 @@ function proxyToSupabase(req, res, urlPath) {
     if (isJsonRest && body.length) {
       try {
         const parsed = JSON.parse(body.toString('utf8'));
+        if (urlPath.startsWith('/rest/v1/user_plan_preferences')) {
+          console.log('[DEBUG user_plan_preferences body]', req.method, JSON.stringify(parsed));
+        }
         body = Buffer.from(JSON.stringify(sanitizeEmptyDates(parsed)), 'utf8');
       } catch {
         // no era JSON válido / no parseable: se reenvía tal cual
