@@ -1,7 +1,7 @@
 {
   "name": "metodo-3x-pro",
   "version": "1.0.0",
-  "description": "MÉTODO 21/7 — mirror del build de producción para redeploy en Railway",
+  "description": "MÉTODO CAMINA 3X — mirror del build de producción para redeploy en Railway",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"

@@ -1,4 +1,11 @@
-# Método 21/7 — mirror de recuperación
+# Método Camina 3X — mirror de recuperación
+
+> Se llamaba **"MÉTODO 21/7"** en el sitio original de Lovable. Por pedido del
+> dueño se rebrandeó a **"Método Camina 3X"**: título, meta tags, manifest de
+> la PWA, logo, íconos y las apariciones del nombre dentro de la app (no se
+> tocaron las menciones internas al "modelo 21/7" / "Plato 21/7" / "Planilla
+> de Progreso 21/7" — son nombres de piezas del contenido/metodología, no la
+> marca; avisá si también hay que renombrarlas).
 
 Copia exacta del **build de producción** que estaba sirviendo
 `https://appmetodo217.lovable.app`, re-empaquetada para poder alojarla fuera de
@@ -46,12 +53,25 @@ nuevo:
 sed -i 's#https://debyagwouidprymnzrnl\.supabase\.co#https://TU-DOMINIO-NUEVO#g' assets/index-Cnl7J6tT.js
 ```
 
+## Bug conocido y ya arreglado: el coach no respondía ("Error al procesar tu mensaje")
+Otro bug del original (no relacionado con la migración): al escribirle a la
+coach Ana, la app intenta actualizar la cuota diaria de mensajes en
+`user_plan_preferences` y manda una columna de fecha (ej. `last_reset_at`)
+como string vacío `""` en vez de `null`. Postgres la rechaza
+(`22007: invalid input syntax for type date`), la petición corta con 400 y el
+chat nunca llega a llamar a la función `coach-chat`.
+
+**Arreglo aplicado:** `server.js` sanea el cuerpo de cualquier `PATCH`/`POST`
+JSON hacia `/rest/v1/*` — si un campo termina en `_at` o `_date` y llega como
+`""`, lo convierte en `null` antes de reenviarlo a Supabase. Ya probado en
+producción: el chat con Ana funciona.
+
 ## Qué NO se puede garantizar
 - **No hay acceso al dashboard de Supabase** (se perdió junto con el de
   Lovable), así que no se puede ver/exportar la base de datos de usuarios, ni
-  tocar la función `coach-chat` si algo falla (por ejemplo si tenía una key de
-  IA con costo que ya venció). Probá el chat del coach en producción para
-  confirmar que responde.
+  tocar la función `coach-chat` si algo falla más adelante (por ejemplo si
+  tenía una key de IA con costo que vence). Ya se probó en producción y Ana
+  responde a los mensajes.
 - No existe el código fuente original (componentes React, lógica) — solo el
   build compilado y minificado. Si en algún momento hay que **modificar** la
   app (cambiar textos, agregar una pantalla, etc.), hay que reconstruirla

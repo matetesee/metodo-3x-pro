@@ -1,5 +1,5 @@
 // Servidor estático minimalista, sin dependencias externas.
-// Sirve el build de "MÉTODO 21/7" (React/Vite) para Railway, con fallback de SPA
+// Sirve el build de "MÉTODO CAMINA 3X" (ex "MÉTODO 21/7", React/Vite) para Railway, con fallback de SPA
 // para que las rutas del cliente (react-router) funcionen al refrescar/entrar directo.
 const http = require('http');
 const https = require('https');
@@ -31,11 +31,43 @@ function isSupabaseProxyPath(pathname) {
   return SUPABASE_PROXY_PREFIXES.some((prefix) => pathname.startsWith(prefix));
 }
 
-function proxyToSupabase(req, res) {
+// Bug del original: al resetear la cuota diaria manda columnas de fecha
+// (ej. last_reset_at) como string vacío "" en vez de null, y Postgres las
+// rechaza (22007: invalid input syntax for type date). Eso frena el chat del
+// coach antes de llegar a la función. No tenemos el código fuente para
+// arreglarlo ahí, así que se sanea acá: cualquier campo *_at/*_date en "" se
+// convierte en null antes de reenviar el pedido a Supabase.
+function sanitizeEmptyDates(obj) {
+  if (Array.isArray(obj)) return obj.map(sanitizeEmptyDates);
+  if (obj && typeof obj === 'object') {
+    const out = {};
+    for (const [k, v] of Object.entries(obj)) {
+      out[k] = v === '' && /(_at|_date)$/i.test(k) ? null : sanitizeEmptyDates(v);
+    }
+    return out;
+  }
+  return obj;
+}
+
+function proxyToSupabase(req, res, urlPath) {
   const chunks = [];
   req.on('data', (chunk) => chunks.push(chunk));
   req.on('end', () => {
-    const body = Buffer.concat(chunks);
+    let body = Buffer.concat(chunks);
+    const isJsonRest =
+      urlPath.startsWith('/rest/v1/') &&
+      (req.method === 'PATCH' || req.method === 'POST') &&
+      (req.headers['content-type'] || '').includes('application/json');
+
+    if (isJsonRest && body.length) {
+      try {
+        const parsed = JSON.parse(body.toString('utf8'));
+        body = Buffer.from(JSON.stringify(sanitizeEmptyDates(parsed)), 'utf8');
+      } catch {
+        // no era JSON válido / no parseable: se reenvía tal cual
+      }
+    }
+
     const headers = { ...req.headers };
     delete headers.host;
     delete headers['content-length'];
@@ -82,7 +114,7 @@ const server = http.createServer((req, res) => {
   let urlPath = decodeURIComponent(req.url.split('?')[0]);
 
   if (isSupabaseProxyPath(urlPath)) {
-    proxyToSupabase(req, res);
+    proxyToSupabase(req, res, urlPath);
     return;
   }
 
@@ -119,5 +151,5 @@ const server = http.createServer((req, res) => {
 });
 
 server.listen(PORT, () => {
-  console.log(`Método 21/7 corriendo en el puerto ${PORT}`);
+  console.log(`Método Camina 3X corriendo en el puerto ${PORT}`);
 });
