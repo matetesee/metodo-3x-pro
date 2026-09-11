@@ -23,6 +23,29 @@ O sea que, salvo que ese proyecto de Supabase se elimine o se revoque la key,
 login y datos de usuario deberían seguir funcionando exactamente igual que en
 el original, porque apunta al mismo backend.
 
+## Bug conocido y ya arreglado: CORS en "Activar mi plan"
+Al probarlo en producción, activar el plan tiraba "Hubo un problema. Intentá de
+nuevo." La causa: la función de Supabase `register-email` solo acepta pedidos
+con `Origin: https://debyagwouidprymnzrnl.lovable.app` (hardcodeado ahí), y no
+tenemos acceso al dashboard de Supabase para cambiarlo. El navegador bloqueaba
+la respuesta por CORS antes de que la app la viera.
+
+**Arreglo aplicado:** se parchearon las dos ocurrencias de la URL de Supabase
+dentro de `assets/index-Cnl7J6tT.js` (antes `https://debyagwouidprymnzrnl.supabase.co`)
+para que apunten a este mismo dominio, y `server.js` ahora hace de proxy:
+reenvía cualquier pedido a `/auth/v1/*`, `/rest/v1/*`, `/functions/v1/*` o
+`/storage/v1/*` hacia Supabase por atrás (servidor a servidor, donde CORS no
+aplica) y devuelve la respuesta como si fuera propia. Así el navegador solo
+habla con este dominio — sin problema de CORS — y Supabase sigue recibiendo
+los pedidos igual que antes.
+
+**Si el dominio de este deploy cambia** (dominio propio, otro proyecto de
+Railway, etc.), hay que repetir el patch sobre el bundle apuntando al dominio
+nuevo:
+```bash
+sed -i 's#https://debyagwouidprymnzrnl\.supabase\.co#https://TU-DOMINIO-NUEVO#g' assets/index-Cnl7J6tT.js
+```
+
 ## Qué NO se puede garantizar
 - **No hay acceso al dashboard de Supabase** (se perdió junto con el de
   Lovable), así que no se puede ver/exportar la base de datos de usuarios, ni
