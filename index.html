@@ -81,7 +81,7 @@
         a.href = HREF;
         a.className = 'relative flex flex-col items-center justify-center gap-1 flex-1 min-w-0 h-full transition-smooth';
         a.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 shrink-0 text-sidebar-foreground/70">'+ICON+'</svg><span class="text-[10px] leading-tight font-medium text-center truncate max-w-full px-0.5 text-sidebar-foreground/70">'+LABEL+'</span>';
-        bar.appendChild(a);
+        bar.insertBefore(a, bar.firstElementChild);
       }
       function addDesktop(){
         var nav = findDesktopNav();
@@ -91,7 +91,7 @@
         a.href = HREF;
         a.className = 'flex items-center gap-3 px-4 py-3 rounded-lg transition-smooth text-sidebar-foreground hover:bg-sidebar-accent';
         a.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">'+ICON+'</svg><span class="font-medium">'+LABEL+'</span>';
-        nav.appendChild(a);
+        nav.insertBefore(a, nav.firstElementChild);
       }
       function ensure(){ addMobile(); addDesktop(); }
       ensure();
