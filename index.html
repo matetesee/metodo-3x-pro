@@ -93,8 +93,24 @@
         a.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">'+ICON+'</svg><span class="font-medium">'+LABEL+'</span>';
         nav.insertBefore(a, nav.firstElementChild);
       }
-      function ensure(){ addMobile(); addDesktop(); }
+      // Cartel "EN MANTENIMIENTO" en /coach (el chat con la coach no está
+      // andando ahora mismo). Se agrega/saca solo según la ruta actual.
+      function ensureCoachMaintenance(){
+        var onCoach = location.pathname === '/coach';
+        var existing = document.querySelector('[data-c3x-maint]');
+        if(!onCoach){ if(existing) existing.remove(); return; }
+        if(existing) return;
+        var header = document.querySelector('main header');
+        if(!header || !header.parentNode) return;
+        var banner = document.createElement('div');
+        banner.setAttribute('data-c3x-maint','1');
+        banner.style.cssText = 'display:flex;align-items:center;gap:10px;background:#fff3cd;border:1px solid #ffe08a;color:#7a5c00;border-radius:12px;padding:12px 16px;margin-bottom:16px;font-weight:600;font-size:14px;line-height:1.4';
+        banner.innerHTML = '<span style="font-size:20px;flex:none">🛠️</span><span>EN MANTENIMIENTO — Tu Coach no está disponible en este momento. Ya estamos trabajando para restablecerlo.</span>';
+        header.parentNode.insertBefore(banner, header.nextSibling);
+      }
+      function ensure(){ addMobile(); addDesktop(); ensureCoachMaintenance(); }
       ensure();
+      window.addEventListener('popstate', ensure);
       var obs = new MutationObserver(function(){ ensure(); });
       obs.observe(document.body, {childList:true, subtree:true});
     })();
