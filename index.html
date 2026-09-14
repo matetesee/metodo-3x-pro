@@ -49,5 +49,55 @@
 
   <body>
     <div id="root"></div>
+    <!--
+      Pestaña "Camina 3X" agregada por fuera del bundle de React (no tenemos
+      el código fuente para sumarle una ruta real al router del cliente — ver
+      README). Este script inyecta un link más en la barra inferior (mobile)
+      y en el sidebar (desktop) apuntando a /camina-3x (HTML estático propio).
+      Usa un MutationObserver como red de seguridad por si React vuelve a
+      renderizar esas barras y se pierde el link inyectado.
+    -->
+    <script>
+    (function(){
+      var HREF = '/camina-3x';
+      var LABEL = 'Camina 3X';
+      var ICON = '<path d="M4 16v-2.38C4 11.5 2.97 10.5 3 8c.03-2.72 1.49-6 4.5-6C9.37 2 10 3.8 10 5.5c0 3.11-2 5.66-2 8.68V16a2 2 0 1 1-4 0Z"></path><path d="M20 20v-2.38c0-2.12 1.03-3.12 1-5.62-.03-2.72-1.49-6-4.5-6C14.63 6 14 7.8 14 9.5c0 3.11 2 5.66 2 8.68V20a2 2 0 1 0 4 0Z"></path><path d="M16 17h4"></path><path d="M4 13h4"></path>';
+
+      function findMobileBar(){
+        var nav = Array.from(document.querySelectorAll('nav')).find(function(n){
+          return getComputedStyle(n).position === 'fixed' && n.className.indexOf('bottom-0') > -1;
+        });
+        return nav ? nav.firstElementChild : null;
+      }
+      function findDesktopNav(){
+        var aside = document.querySelector('aside');
+        return aside ? aside.querySelector('nav') : null;
+      }
+      function addMobile(){
+        var bar = findMobileBar();
+        if(!bar || bar.querySelector('[data-c3x]')) return;
+        var a = document.createElement('a');
+        a.setAttribute('data-c3x','1');
+        a.href = HREF;
+        a.className = 'relative flex flex-col items-center justify-center gap-1 flex-1 min-w-0 h-full transition-smooth';
+        a.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6 shrink-0 text-sidebar-foreground/70">'+ICON+'</svg><span class="text-[10px] leading-tight font-medium text-center truncate max-w-full px-0.5 text-sidebar-foreground/70">'+LABEL+'</span>';
+        bar.appendChild(a);
+      }
+      function addDesktop(){
+        var nav = findDesktopNav();
+        if(!nav || nav.querySelector('[data-c3x-d]')) return;
+        var a = document.createElement('a');
+        a.setAttribute('data-c3x-d','1');
+        a.href = HREF;
+        a.className = 'flex items-center gap-3 px-4 py-3 rounded-lg transition-smooth text-sidebar-foreground hover:bg-sidebar-accent';
+        a.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">'+ICON+'</svg><span class="font-medium">'+LABEL+'</span>';
+        nav.appendChild(a);
+      }
+      function ensure(){ addMobile(); addDesktop(); }
+      ensure();
+      var obs = new MutationObserver(function(){ ensure(); });
+      obs.observe(document.body, {childList:true, subtree:true});
+    })();
+    </script>
   </body>
 </html>

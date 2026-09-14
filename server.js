@@ -125,6 +125,12 @@ const server = http.createServer((req, res) => {
 
   if (urlPath === '/') urlPath = '/index.html';
 
+  // Pestaña propia "Camina 3X" (mecanismo + progresión), agregada afuera del
+  // bundle de React (no tenemos el código fuente para sumarle una ruta real
+  // al router del cliente — ver README). Es HTML estático, con nav propia que
+  // vuelve a llevar al bundle SPA para el resto de la app.
+  if (urlPath === '/camina-3x') urlPath = '/camina-3x.html';
+
   const filePath = path.normalize(path.join(ROOT, urlPath));
 
   // Evita path traversal fuera del directorio del proyecto.

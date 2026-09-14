@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Camina 3X — Método Camina 3X™</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="/icon-192.png">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&display=swap');
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  font-family:'Poppins',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  background:#f5f9f9; color:#0f2420;
+  padding-bottom:80px; /* deja lugar a la bottom nav fija */
+}
+a{color:inherit;text-decoration:none}
+
+/* header */
+.topbar{position:sticky;top:0;z-index:20;background:#133933;color:#deede8;display:flex;align-items:center;gap:12px;padding:14px 16px;box-shadow:0 2px 10px rgba(0,0,0,.15)}
+.topbar .back{font-size:22px;line-height:1;color:#deede8;background:none;border:none;cursor:pointer;padding:2px 4px}
+.topbar .brand{font-weight:800;font-size:15px;letter-spacing:.02em}
+.topbar .brand small{display:block;font-weight:600;font-size:10px;letter-spacing:.18em;color:#7eceb3;text-transform:uppercase}
+
+.wrap{max-width:520px;margin:0 auto;padding:22px 18px 8px}
+
+/* hero */
+.hero{text-align:center;margin-bottom:26px}
+.hero .icon{width:64px;height:64px;border-radius:50%;background:#e8eeed;display:flex;align-items:center;justify-content:center;font-size:30px;margin:0 auto 14px;border:1.5px solid #dce5e3}
+.hero h1{font-size:23px;font-weight:800;margin:0 0 6px;line-height:1.2}
+.hero .mech{font-weight:700;font-size:13px;letter-spacing:.14em;color:#133933;text-transform:uppercase}
+.hero .mech b{color:#0e7a54}
+.hero p{color:#3d5a52;font-size:14px;line-height:1.5;margin:10px auto 0;max-width:380px}
+
+/* section headings */
+.sec{margin-bottom:28px}
+.sec h2{font-size:16px;font-weight:800;margin:0 0 4px}
+.sec .sub{color:#3d5a52;font-size:13px;margin:0 0 14px}
+
+/* caminatas cards */
+.walk{display:flex;gap:12px;align-items:flex-start;background:#fff;border:1px solid #dce5e3;border-radius:14px;padding:14px 14px;margin-bottom:10px;box-shadow:0 2px 8px rgba(19,57,51,.05)}
+.walk .emoji{font-size:26px;flex:none;width:38px;text-align:center}
+.walk .body{flex:1}
+.walk .tag{display:inline-block;font-size:10.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#0e7a54;background:#e3f5ec;padding:3px 9px;border-radius:20px;margin-bottom:5px}
+.walk .title{font-weight:700;font-size:14.5px;margin-bottom:3px}
+.walk .desc{color:#3d5a52;font-size:13px;line-height:1.45;margin:0}
+.walk .check{flex:none;width:26px;height:26px;border-radius:50%;border:2px solid #b7d9cc;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;color:transparent;transition:.15s;margin-top:4px}
+.walk .check.done{background:#0e7a54;border-color:#0e7a54;color:#fff}
+
+/* progresion semanal */
+.weeks{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.week{background:#fff;border:1.5px solid #dce5e3;border-radius:14px;padding:14px;text-align:center;cursor:pointer;transition:.15s;position:relative}
+.week.active{border-color:#0e7a54;box-shadow:0 0 0 2px rgba(14,122,84,.18)}
+.week .n{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#3d5a52}
+.week .steps{font-size:22px;font-weight:800;margin:4px 0 2px;color:#133933}
+.week .label{font-size:11.5px;font-weight:700;color:#0e7a54}
+.week .badge{position:absolute;top:-9px;right:10px;background:#0e7a54;color:#fff;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px}
+
+.quote{text-align:center;font-style:italic;color:#133933;font-weight:600;font-size:15px;line-height:1.5;margin:6px 0 30px;padding:0 10px}
+
+/* bottom nav (misma estética que la app) */
+.bnav{position:fixed;left:0;right:0;bottom:0;height:60px;background:#133933;display:flex;align-items:center;justify-content:space-around;z-index:30;padding:0 2px}
+.bnav a{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;flex:1;height:100%;color:#9fb8b0;font-size:10px;font-weight:600}
+.bnav a svg{width:20px;height:20px}
+.bnav a.active{color:#7eceb3}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="back" href="/" aria-label="Volver">‹</a>
+  <div class="brand"><small>MÉTODO</small>CAMINA 3X</div>
+</div>
+
+<div class="wrap">
+
+  <div class="hero">
+    <div class="icon">🧭</div>
+    <h1>Tu Plan de Caminatas</h1>
+    <div class="mech">CAMINA → <b>ACTIVA</b> → <b>QUEMA</b></div>
+    <p>No se trata de "salir a caminar" sin más. Es un método progresivo: 3 caminatas cortas por día, con un objetivo de pasos que sube de a poco cada semana.</p>
+  </div>
+
+  <div class="sec">
+    <h2>Tus 3 caminatas de hoy</h2>
+    <p class="sub">Marcalas a medida que las hacés — se guardan en este celular.</p>
+
+    <div class="walk" data-walk="1">
+      <div class="emoji">🌅</div>
+      <div class="body">
+        <span class="tag">Activa</span>
+        <div class="title">Caminata 1 — 10 a 15 min</div>
+        <p class="desc">Por la mañana. Arrancás el día en movimiento.</p>
+      </div>
+      <div class="check" data-check="1">✓</div>
+    </div>
+
+    <div class="walk" data-walk="2">
+      <div class="emoji">☀️</div>
+      <div class="body">
+        <span class="tag">Acelera</span>
+        <div class="title">Caminata 2 — 15 a 20 min</div>
+        <p class="desc">Después del almuerzo. Sumás gasto justo cuando normalmente te quedarías sentada.</p>
+      </div>
+      <div class="check" data-check="2">✓</div>
+    </div>
+
+    <div class="walk" data-walk="3">
+      <div class="emoji">🌙</div>
+      <div class="body">
+        <span class="tag">Cierra</span>
+        <div class="title">Caminata 3 — 15 a 20 min</div>
+        <p class="desc">Después de cenar. Completás tu objetivo diario sin sentir que hiciste "cardio".</p>
+      </div>
+      <div class="check" data-check="3">✓</div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <h2>Tu progresión de 4 semanas</h2>
+    <p class="sub">Tocá la semana en la que estás para marcarla.</p>
+    <div class="weeks" id="weeks">
+      <div class="week" data-week="1"><div class="n">Semana 1</div><div class="steps">5.000</div><div class="label">Desbloqueo</div></div>
+      <div class="week" data-week="2"><div class="n">Semana 2</div><div class="steps">7.000</div><div class="label">Activación</div></div>
+      <div class="week" data-week="3"><div class="n">Semana 3</div><div class="steps">8.500</div><div class="label">Aceleración</div></div>
+      <div class="week" data-week="4"><div class="n">Semana 4</div><div class="steps">10.000</div><div class="label">Quema</div></div>
+    </div>
+  </div>
+
+  <p class="quote">"Si podés caminar,<br>podés empezar a bajar de peso."</p>
+
+</div>
+
+<nav class="bnav">
+  <a href="/"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M3 10h18"></path><path d="m9 16 2 2 4-4"></path></svg>Mi Plan</a>
+  <a href="/recipes"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21a1 1 0 0 0 1-1v-5.35c0-.457.316-.844.727-1.041a4 4 0 0 0-2.134-7.589 5 5 0 0 0-9.186 0 4 4 0 0 0-2.134 7.588c.411.198.727.585.727 1.041V20a1 1 0 0 0 1 1Z"></path><path d="M6 17h12"></path></svg>Recetas</a>
+  <a class="active" href="/camina-3x"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4" r="2"></circle><path d="m18 19-1.5-8.5L20 8"></path><path d="M14 22 9 22"></path><path d="M8 8l4 2 3-2"></path><path d="M9 22v-6.5l-2.6-3.5L9 8"></path></svg>Camina 3X</a>
+  <a href="/coach"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m16.24 7.76-1.804 5.411a2 2 0 0 1-1.265 1.265L7.76 16.24l1.804-5.411a2 2 0 0 1 1.265-1.265z"></path><circle cx="12" cy="12" r="10"></circle></svg>Tu Coach</a>
+  <a href="/premium"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11.562 3.266a.5.5 0 0 1 .876 0L15.39 8.87a1 1 0 0 0 1.516.294L21.183 5.5a.5.5 0 0 1 .798.519l-2.834 10.246a1 1 0 0 1-.956.734H5.81a1 1 0 0 1-.957-.734L2.02 6.02a.5.5 0 0 1 .798-.519l4.276 3.664a1 1 0 0 0 1.516-.294z"></path></svg>Premium</a>
+</nav>
+
+<script>
+// Checklist diario de las 3 caminatas — se guarda por día (se reinicia solo).
+var today = new Date().toISOString().slice(0,10);
+var KEY = 'c3x_walks_' + today;
+function getDone(){ try{ return JSON.parse(localStorage.getItem(KEY)||'{}'); }catch(e){ return {}; } }
+function setDone(d){ try{ localStorage.setItem(KEY, JSON.stringify(d)); }catch(e){} }
+var done = getDone();
+document.querySelectorAll('.check').forEach(function(el){
+  var id = el.getAttribute('data-check');
+  if(done[id]) el.classList.add('done');
+  el.addEventListener('click', function(){
+    done[id] = !done[id];
+    el.classList.toggle('done', !!done[id]);
+    setDone(done);
+  });
+});
+
+// Semana activa de la progresión — se guarda entre visitas (no por día).
+var WK = 'c3x_week';
+var week = parseInt(localStorage.getItem(WK)||'1', 10);
+function paintWeek(){
+  document.querySelectorAll('.week').forEach(function(el){
+    var w = +el.getAttribute('data-week');
+    el.classList.toggle('active', w===week);
+    var badge = el.querySelector('.badge');
+    if(badge) badge.remove();
+    if(w===week){ var b=document.createElement('div'); b.className='badge'; b.textContent='Hoy'; el.appendChild(b); }
+  });
+}
+document.querySelectorAll('.week').forEach(function(el){
+  el.addEventListener('click', function(){
+    week = +el.getAttribute('data-week');
+    try{ localStorage.setItem(WK, String(week)); }catch(e){}
+    paintWeek();
+  });
+});
+paintWeek();
+</script>
+</body>
+</html>
